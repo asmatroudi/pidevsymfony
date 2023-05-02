@@ -1,0 +1,70 @@
+{% extends "base-back.html.twig" %}
+
+{% block title %}
+	Users
+{% endblock %}
+
+{% block pagewrapper %}
+	<h1>Users</h1>
+
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success ">
+			{{ message }}
+		</div>
+	{% endfor %}
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Email</th>
+				<th>Role</th>
+				<th>Password</th>
+				<th>Cin</th>
+				<th>Nom</th>
+				<th>Prenom</th>
+				<th>Age</th>
+				<th>Adresse</th>
+				<th>Status</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for user in users %}
+				<tr>
+					<td>{{ user.email }}</td>
+					<td>{{ user.role }}</td>
+					<td>{{ user.password }}</td>
+					<td>{{ user.cin }}</td>
+					<td>{{ user.nom }}</td>
+					<td>{{ user.prenom }}</td>
+					<td>{{ user.age }}</td>
+					<td>{{ user.adresse }}</td>
+					<td>
+						{% if user.isBlocked %}
+							blocked
+						{% else %}
+							active
+						{% endif %}
+					</td>
+					<td>
+						<a href="{{ path('app_user_show', {'id': user.iduser}) }}">show</a>
+
+						<a href="{{ path('app_user_block', {'id': user.iduser}) }}">
+							{% if user.isBlocked %}
+								unblock
+							{% else %}
+								block
+							{% endif %}
+						</a>
+
+						{{ include('user/_delete_form.html.twig') }}
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="11">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
